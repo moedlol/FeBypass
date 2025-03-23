@@ -186,6 +186,8 @@ h01pkButton.Parent = mainFrame
 h01pkButton.Active = false
 
 local isInjected = false
+local isKeySystemUnlocked = false
+
 injectButton.MouseButton1Click:Connect(function()
     if not isInjected then
         local function injectBackdoor(obj)
@@ -235,6 +237,7 @@ submitButton.MouseButton1Click:Connect(function()
     if keyTextBox.Text == "Yaazkidd" then
         keyGui.Enabled = false
         gui.Enabled = true
+        isKeySystemUnlocked = true
     else
         keyTextBox.Text = "Invalid Key!"
         wait(2)
@@ -314,6 +317,8 @@ end)
 
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.KeyCode == Enum.KeyCode.LeftAlt or input.KeyCode == Enum.KeyCode.RightAlt then
-        gui.Enabled = not gui.Enabled
+        if isKeySystemUnlocked then
+            gui.Enabled = not gui.Enabled
+        end
     end
 end)
