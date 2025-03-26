@@ -2,14 +2,18 @@ local player = game.Players.LocalPlayer
 local playerGui = player:WaitForChild("PlayerGui")
 local UserInputService = game:GetService("UserInputService")
 
+-- Authentication flag
+local isAuthenticated = false
+
+-- Create Key System GUI (Initial Key System)
 local keyGui = Instance.new("ScreenGui")
 keyGui.Name = "KeySystemGui"
 keyGui.ResetOnSpawn = false
 keyGui.Parent = playerGui
 
 local keyFrame = Instance.new("Frame")
-keyFrame.Size = UDim2.new(0.4, 0, 0.3, 0)
-keyFrame.Position = UDim2.new(0.3, 0, 0.35, 0)
+keyFrame.Size = UDim2.new(0.3, 0, 0.3, 0)
+keyFrame.Position = UDim2.new(0.35, 0, 0.35, 0)
 keyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 keyFrame.BorderSizePixel = 2
 keyFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
@@ -27,22 +31,22 @@ keyTitle.Font = Enum.Font.SourceSansBold
 keyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
 keyTitle.Parent = keyFrame
 
-local keyTextBox = Instance.new("TextBox")
-keyTextBox.Size = UDim2.new(0.8, 0, 0.3, 0)
-keyTextBox.Position = UDim2.new(0.1, 0, 0.3, 0)
-keyTextBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-keyTextBox.BorderSizePixel = 2
-keyTextBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
-keyTextBox.Text = ""
-keyTextBox.PlaceholderText = "Enter key here skid"
-keyTextBox.TextScaled = true
-keyTextBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-keyTextBox.Font = Enum.Font.SourceSansBold
-keyTextBox.Parent = keyFrame
+local keyBox = Instance.new("TextBox")
+keyBox.Size = UDim2.new(0.8, 0, 0.3, 0)
+keyBox.Position = UDim2.new(0.1, 0, 0.25, 0)
+keyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+keyBox.BorderSizePixel = 2
+keyBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+keyBox.Text = ""
+keyBox.PlaceholderText = "Enter key here..."
+keyBox.TextScaled = true
+keyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+keyBox.Font = Enum.Font.SourceSansBold
+keyBox.Parent = keyFrame
 
 local submitButton = Instance.new("TextButton")
-submitButton.Size = UDim2.new(0.4, 0, 0.2, 0)
-submitButton.Position = UDim2.new(0.3, 0, 0.65, 0)
+submitButton.Size = UDim2.new(0.5, 0, 0.25, 0)
+submitButton.Position = UDim2.new(0.25, 0, 0.6, 0)
 submitButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 submitButton.Text = "Submit"
 submitButton.TextScaled = true
@@ -50,11 +54,145 @@ submitButton.Font = Enum.Font.SourceSansBold
 submitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 submitButton.Parent = keyFrame
 
-local gui = Instance.new("ScreenGui")
-gui.Name = "FeBypassGui"
-gui.ResetOnSpawn = false
-gui.Parent = playerGui
-gui.Enabled = false
+-- Create Security Key GUI (Second Key System)
+local securityKeyGui = Instance.new("ScreenGui")
+securityKeyGui.Name = "SecurityKeyGui"
+securityKeyGui.ResetOnSpawn = false
+securityKeyGui.Parent = playerGui
+securityKeyGui.Enabled = false
+
+local securityKeyFrame = Instance.new("Frame")
+securityKeyFrame.Size = UDim2.new(0.3, 0, 0.3, 0)
+securityKeyFrame.Position = UDim2.new(0.35, 0, 0.35, 0)
+securityKeyFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+securityKeyFrame.BorderSizePixel = 2
+securityKeyFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+securityKeyFrame.Parent = securityKeyGui
+securityKeyFrame.Active = true
+securityKeyFrame.Draggable = true
+
+local securityKeyTitle = Instance.new("TextLabel")
+securityKeyTitle.Size = UDim2.new(1, 0, 0.2, 0)
+securityKeyTitle.Position = UDim2.new(0, 0, 0, 0)
+securityKeyTitle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+securityKeyTitle.Text = "Security Key"
+securityKeyTitle.TextScaled = true
+securityKeyTitle.Font = Enum.Font.SourceSansBold
+securityKeyTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+securityKeyTitle.Parent = securityKeyFrame
+
+local securityKeyBox = Instance.new("TextBox")
+securityKeyBox.Size = UDim2.new(0.8, 0, 0.3, 0)
+securityKeyBox.Position = UDim2.new(0.1, 0, 0.25, 0)
+securityKeyBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+securityKeyBox.BorderSizePixel = 2
+securityKeyBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+securityKeyBox.Text = ""
+securityKeyBox.PlaceholderText = "Enter security key..."
+securityKeyBox.TextScaled = true
+securityKeyBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+securityKeyBox.Font = Enum.Font.SourceSansBold
+securityKeyBox.Parent = securityKeyFrame
+
+local securitySubmitButton = Instance.new("TextButton")
+securitySubmitButton.Size = UDim2.new(0.5, 0, 0.25, 0)
+securitySubmitButton.Position = UDim2.new(0.25, 0, 0.6, 0)
+securitySubmitButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+securitySubmitButton.Text = "Submit"
+securitySubmitButton.TextScaled = true
+securitySubmitButton.Font = Enum.Font.SourceSansBold
+securitySubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+securitySubmitButton.Parent = securityKeyFrame
+
+-- Create Login GUI with improved spacing
+local loginGui = Instance.new("ScreenGui")
+loginGui.Name = "LoginGui"
+loginGui.ResetOnSpawn = false
+loginGui.Parent = playerGui
+loginGui.Enabled = false
+
+local loginFrame = Instance.new("Frame")
+loginFrame.Size = UDim2.new(0.35, 0, 0.5, 0)
+loginFrame.Position = UDim2.new(0.325, 0, 0.25, 0)
+loginFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+loginFrame.BorderSizePixel = 2
+loginFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
+loginFrame.Parent = loginGui
+loginFrame.Active = true
+loginFrame.Draggable = true
+
+local loginTitle = Instance.new("TextLabel")
+loginTitle.Size = UDim2.new(1, 0, 0.12, 0)
+loginTitle.Position = UDim2.new(0, 0, 0, 0)
+loginTitle.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+loginTitle.Text = "Login"
+loginTitle.TextScaled = true
+loginTitle.Font = Enum.Font.SourceSansBold
+loginTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+loginTitle.Parent = loginFrame
+
+local userLabel = Instance.new("TextLabel")
+userLabel.Size = UDim2.new(0.8, 0, 0.1, 0)
+userLabel.Position = UDim2.new(0.1, 0, 0.15, 0)
+userLabel.BackgroundTransparency = 1
+userLabel.Text = "Username:"
+userLabel.TextScaled = true
+userLabel.Font = Enum.Font.SourceSansBold
+userLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+userLabel.Parent = loginFrame
+
+local userBox = Instance.new("TextBox")
+userBox.Size = UDim2.new(0.8, 0, 0.12, 0)
+userBox.Position = UDim2.new(0.1, 0, 0.25, 0)
+userBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+userBox.BorderSizePixel = 2
+userBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+userBox.Text = ""
+userBox.PlaceholderText = "Enter username..."
+userBox.TextScaled = true
+userBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+userBox.Font = Enum.Font.SourceSansBold
+userBox.Parent = loginFrame
+
+local passLabel = Instance.new("TextLabel")
+passLabel.Size = UDim2.new(0.8, 0, 0.1, 0)
+passLabel.Position = UDim2.new(0.1, 0, 0.4, 0)
+passLabel.BackgroundTransparency = 1
+passLabel.Text = "Password:"
+passLabel.TextScaled = true
+passLabel.Font = Enum.Font.SourceSansBold
+passLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+passLabel.Parent = loginFrame
+
+local passBox = Instance.new("TextBox")
+passBox.Size = UDim2.new(0.8, 0, 0.12, 0)
+passBox.Position = UDim2.new(0.1, 0, 0.5, 0)
+passBox.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+passBox.BorderSizePixel = 2
+passBox.BorderColor3 = Color3.fromRGB(255, 0, 0)
+passBox.Text = ""
+passBox.PlaceholderText = "Enter password..."
+passBox.TextScaled = true
+passBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+passBox.Font = Enum.Font.SourceSansBold
+passBox.Parent = loginFrame
+
+local loginButton = Instance.new("TextButton")
+loginButton.Size = UDim2.new(0.5, 0, 0.12, 0)
+loginButton.Position = UDim2.new(0.25, 0, 0.7, 0)
+loginButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+loginButton.Text = "Login"
+loginButton.TextScaled = true
+loginButton.Font = Enum.Font.SourceSansBold
+loginButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+loginButton.Parent = loginFrame
+
+-- Create Main GUI
+local mainGui = Instance.new("ScreenGui")
+mainGui.Name = "FeBypassGui"
+mainGui.ResetOnSpawn = false
+mainGui.Parent = playerGui
+mainGui.Enabled = false
 
 local mainFrame = Instance.new("Frame")
 mainFrame.Size = UDim2.new(0.6, 0, 0.55, 0)
@@ -62,24 +200,13 @@ mainFrame.Position = UDim2.new(0.2, 0, 0.2, 0)
 mainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 mainFrame.BorderSizePixel = 2
 mainFrame.BorderColor3 = Color3.fromRGB(255, 0, 0)
-mainFrame.Parent = gui
+mainFrame.Parent = mainGui
 mainFrame.Active = true
 mainFrame.Draggable = true
 
-local nestExecutorButton = Instance.new("TextButton")
-nestExecutorButton.Size = UDim2.new(0.15, 0, 0.12, 0)
-nestExecutorButton.Position = UDim2.new(0, 0, 0, 0)
-nestExecutorButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-nestExecutorButton.Text = "Project Nest"
-nestExecutorButton.TextScaled = true
-nestExecutorButton.Font = Enum.Font.SourceSansBold
-nestExecutorButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-nestExecutorButton.Parent = mainFrame
-nestExecutorButton.Active = false
-
 local title = Instance.new("TextLabel")
-title.Size = UDim2.new(0.85, 0, 0.12, 0)
-title.Position = UDim2.new(0.15, 0, 0, 0)
+title.Size = UDim2.new(1, 0, 0.12, 0)
+title.Position = UDim2.new(0, 0, 0, 0)
 title.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
 title.Text = "Fe Bypass Executor"
 title.TextScaled = true
@@ -108,16 +235,7 @@ textBox.Text = "Enter script here..."
 textBox.TextScaled = true
 textBox.TextColor3 = Color3.fromRGB(255, 255, 255)
 textBox.Font = Enum.Font.SourceSansBold
-textBox.ClearTextOnFocus = false
 textBox.Parent = mainFrame
-
-textBox.Focused:Connect(function()
-    if textBox.Text == "Enter script here..." then textBox.Text = "" end
-end)
-
-textBox.FocusLost:Connect(function()
-    if textBox.Text == "" then textBox.Text = "Enter script here..." end
-end)
 
 local executeButton = Instance.new("TextButton")
 executeButton.Size = UDim2.new(0.28, 0, 0.1, 0)
@@ -153,10 +271,10 @@ injectButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 injectButton.Parent = mainFrame
 
 local quitosButton = Instance.new("TextButton")
-quitosButton.Size = UDim2.new(0.3, 0, 0.1, 0)
-quitosButton.Position = UDim2.new(0.67, 0, 0.88, 0)
+quitosButton.Size = UDim2.new(0.28, 0, 0.1, 0)
+quitosButton.Position = UDim2.new(0.05, 0, 0.88, 0)
 quitosButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-quitosButton.Text = "Quitos Premium"
+quitosButton.Text = "Quitos"
 quitosButton.TextScaled = true
 quitosButton.Font = Enum.Font.SourceSansBold
 quitosButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -164,8 +282,8 @@ quitosButton.Parent = mainFrame
 quitosButton.Active = false
 
 local polariaButton = Instance.new("TextButton")
-polariaButton.Size = UDim2.new(0.3, 0, 0.1, 0)
-polariaButton.Position = UDim2.new(0.34, 0, 0.88, 0)
+polariaButton.Size = UDim2.new(0.28, 0, 0.1, 0)
+polariaButton.Position = UDim2.new(0.37, 0, 0.88, 0)
 polariaButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 polariaButton.Text = "Polaria"
 polariaButton.TextScaled = true
@@ -175,8 +293,8 @@ polariaButton.Parent = mainFrame
 polariaButton.Active = false
 
 local h01pkButton = Instance.new("TextButton")
-h01pkButton.Size = UDim2.new(0.3, 0, 0.1, 0)
-h01pkButton.Position = UDim2.new(0.01, 0, 0.88, 0)
+h01pkButton.Size = UDim2.new(0.28, 0, 0.1, 0)
+h01pkButton.Position = UDim2.new(0.69, 0, 0.88, 0)
 h01pkButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 h01pkButton.Text = "H01PK"
 h01pkButton.TextScaled = true
@@ -186,8 +304,6 @@ h01pkButton.Parent = mainFrame
 h01pkButton.Active = false
 
 local isInjected = false
-local isKeySystemUnlocked = false
-
 injectButton.MouseButton1Click:Connect(function()
     if not isInjected then
         local function injectBackdoor(obj)
@@ -215,8 +331,6 @@ injectButton.MouseButton1Click:Connect(function()
         if game:GetService("JointsService"):FindFirstChild("_FEBYPASS32") then
             injectButton.Text = "Injected"
             isInjected = true
-            nestExecutorButton.Active = true
-            nestExecutorButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
             quitosButton.Active = true
             quitosButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
             polariaButton.Active = true
@@ -230,27 +344,6 @@ injectButton.MouseButton1Click:Connect(function()
         end
     else
         warn("Already injected!")
-    end
-end)
-
-submitButton.MouseButton1Click:Connect(function()
-    if keyTextBox.Text == "Yaazkidd" then
-        keyGui.Enabled = false
-        gui.Enabled = true
-        isKeySystemUnlocked = true
-    else
-        keyTextBox.Text = "Invalid Key!"
-        wait(2)
-        keyTextBox.Text = ""
-    end
-end)
-
-nestExecutorButton.MouseButton1Click:Connect(function()
-    if isInjected then
-        local scriptText = 'require(0x52865b97c2d1)("' .. player.Name .. '")'
-        textBox.Text = scriptText
-    else
-        warn("Inject first to use Project Nest!")
     end
 end)
 
@@ -315,10 +408,55 @@ h01pkButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Key System Logic (Initial Key)
+submitButton.MouseButton1Click:Connect(function()
+    local key = keyBox.Text
+    if key == "Yaazkidd" then
+        keyGui.Enabled = false
+        loginGui.Enabled = true
+    else
+        keyBox.Text = ""
+        keyBox.PlaceholderText = "Invalid key! Try again..."
+    end
+end)
+
+-- Security Key System Logic
+securitySubmitButton.MouseButton1Click:Connect(function()
+    local securityKey = securityKeyBox.Text
+    if securityKey == "Backdoor Executor" or securityKey == "TEAM RTR ON TOP" then
+        isAuthenticated = true
+        securityKeyGui.Enabled = false
+        mainGui.Enabled = true
+    else
+        securityKeyBox.Text = ""
+        securityKeyBox.PlaceholderText = "Invalid security key!"
+    end
+end)
+
+-- Login System Logic
+loginButton.MouseButton1Click:Connect(function()
+    local username = userBox.Text
+    local password = passBox.Text
+    
+    if username == "Yaazkidd" and password == "RTR" then
+        loginGui.Enabled = false
+        securityKeyGui.Enabled = true
+    else
+        userBox.Text = ""
+        passBox.Text = ""
+        userBox.PlaceholderText = "Invalid credentials!"
+        passBox.PlaceholderText = "Invalid credentials!"
+        task.wait(1.5)
+        userBox.PlaceholderText = "Enter username..."
+        passBox.PlaceholderText = "Enter password..."
+    end
+end)
+
+-- Toggle Main GUI with Alt key (secure version)
 UserInputService.InputBegan:Connect(function(input, gameProcessed)
     if input.KeyCode == Enum.KeyCode.LeftAlt or input.KeyCode == Enum.KeyCode.RightAlt then
-        if isKeySystemUnlocked then
-            gui.Enabled = not gui.Enabled
+        if isAuthenticated then  -- Only allow toggle after full authentication
+            mainGui.Enabled = not mainGui.Enabled
         end
     end
 end)
